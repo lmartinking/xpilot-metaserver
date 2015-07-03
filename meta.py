@@ -15,6 +15,7 @@ user_port = 4400
 
 def start_client_port_server():
 	HOST, PORT = host, client_port
+	SocketServer.TCPServer.allow_reuse_address = True
 	server = ClientPortServer((HOST, PORT), ClientPortRequestHandler)
 	ip, port = server.server_address
 	server_thread = threading.Thread(target=server.serve_forever)
@@ -35,6 +36,7 @@ def start_server_port_server():
 
 def start_user_port_server():
 	HOST, PORT = host, user_port
+	SocketServer.TCPServer.allow_reuse_address = True
 	server = UserPortServer((HOST, PORT), UserPortRequestHandler)
 	ip, port = server.server_address
 	server_thread = threading.Thread(target=server.serve_forever)

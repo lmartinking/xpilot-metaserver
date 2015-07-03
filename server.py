@@ -1,3 +1,4 @@
+import time
 from player import *
 from team import *
 
@@ -53,10 +54,7 @@ class ServerInfo:
 				except ValueError:
 					pass
 			elif command == "port":
-				#try:
-				#	self.port = int(params)
-				#except ValueError:
-				#	pass
+				# port is saved in server_id
 				pass
 			elif command == "mode":
 				self.game_mode = params
@@ -107,9 +105,9 @@ class ServerInfo:
 		self.map_name = None
 		self.map_size = None
 		self.map_author = None
+		self.num_users = None
 		self.num_bases = None
 		self.fps = None
-		self.port = None
 		self.game_mode = None
 		self.num_teams = None
 		self.num_free_bases_per_team = []
@@ -123,7 +121,8 @@ class ServerInfo:
 	def free_to_string(self):
 		s = ""
 		for i in range(len(self.num_free_bases_per_team)):
-			s = s + str(i) + "=" + str(self.num_free_bases_per_team[i])
+			team = self.num_free_bases_per_team[i]
+			s = s + str(team.num) + "=" + str(team.free_bases)
 			if i < len(self.num_free_bases_per_team) - 1:
 				s += ","
 		return s
@@ -137,10 +136,21 @@ class ServerInfo:
 		return s
 
 	def to_string_client(self):
-		return s
+		return self.version + ":" + self.server_name + ":" + str(self.server_id.port) + ":" + str(self.num_users) + ":" + self.map_name + ":" + self.map_size + ":" + self.map_author + ":ok:" + str(self.num_bases) + ":" + str(self.fps) + "::" + self.get_sound_str() + ":" + str(self.get_uptime()) + ":" + str(len(self.num_free_bases_per_team)) + ":" + str(self.timing) + ":" + format(self.server_id.ip_addr) + ":" + self.free_to_string() + ":" + str(self.queue)
+
+	def get_uptime(self):
+		if self.start_time == None:
+			return None
+		return int(time.time()) - self.start_time
+
+	def get_sound_str(self):
+		if self.sound:
+			return "yes"
+		else:
+			return "no"
 
 	def __str__(self):
-		return "server_id: " + format(self.server_id.ip_addr) + ":" + str(self.server_id.port) + " server_name: " + self.server_name + " version: " + self.version + " users: " + str(self.num_users) + " map: " + self.map_name + " sizeMap: " + self.map_size + " author: " + self.map_author + " bases: " + str(self.num_bases) + " fps: " + str(self.fps) + " port: " + str(self.port) + " mode: " + self.game_mode + " teams: " + str(self.num_teams) + " free: " + self.free_to_string() + " timing: " + str(self.timing) + " stime: " + str(self.start_time) + " queue: " + str(self.queue) + " sound: " + str(self.has_sound) + " players: " + self.players_to_string() + " status: " + self.status
+		return "server_id: " + format(self.server_id.ip_addr) + ":" + str(self.server_id.port) + " server_name: " + self.server_name + " version: " + self.version + " users: " + str(self.num_users) + " map: " + self.map_name + " sizeMap: " + self.map_size + " author: " + self.map_author + " bases: " + str(self.num_bases) + " fps: " + str(self.fps) + " port: " + str(self.server_id.port) + " mode: " + self.game_mode + " teams: " + str(self.num_teams) + " free: " + self.free_to_string() + " timing: " + str(self.timing) + " stime: " + str(self.start_time) + " queue: " + str(self.queue) + " sound: " + str(self.has_sound) + " players: " + self.players_to_string() + " status: " + self.status
 
 	def is_valid(self):
 		return True
