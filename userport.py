@@ -1,4 +1,5 @@
 import socket
+from socket import *
 import threading
 import SocketServer
 
@@ -6,9 +7,11 @@ class UserPortRequestHandler(SocketServer.StreamRequestHandler):
 	def handle(self):
 		print "Incoming user " + format(self.client_address[0]) + ":" + str(self.client_address[1])
 
-		self.data = self.rfile.readline().strip()
-		print "Received: " + self.data
-		self.wfile.write(self.data.upper())
+		self.data = "Nothing here yet\n"
+		self.wfile.write(self.data)
+
+		socket = self.request
+		socket.shutdown(SHUT_RDWR)
 
 class UserPortServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
 	pass
