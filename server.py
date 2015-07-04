@@ -24,7 +24,7 @@ class ServerInfo:
 		self.server_id = server_id
 		self.update_time = int(time.time())
 
-		self.prev_command_str = None
+		prev_command_str = None
 
 		for command_str in commands:
 			if not command_str:
@@ -32,11 +32,11 @@ class ServerInfo:
 
 			elements = command_str.split(" ")
 			if elements[0] != "add":
-				if self.prev_command_str == None:
+				if prev_command_str == None:
 					continue
-				command_str = self.prev_command_str + "\n" + command_str
+				command_str = prev_command_str + "\n" + command_str
 				elements = command_str.split(" ")
-			self.prev_command_str = command_str
+			prev_command_str = command_str
 
 			command = elements[1]
 			params = ' '.join(elements[2:])
