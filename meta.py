@@ -24,7 +24,6 @@ def start_client_port_server():
 	server_thread = threading.Thread(target=server.serve_forever)
 	server_thread.daemon = True
 	server_thread.start()
-	print "Server loop running in thread:", server_thread.name
 	return server
 
 def start_server_port_server():
@@ -34,7 +33,6 @@ def start_server_port_server():
 	server_thread = threading.Thread(target=server.serve_forever)
 	server_thread.daemon = True
 	server_thread.start()
-	print "Server loop running in thread:", server_thread.name
 	return server
 
 def start_user_port_server():
@@ -45,7 +43,6 @@ def start_user_port_server():
 	server_thread = threading.Thread(target=server.serve_forever)
 	server_thread.daemon = True
 	server_thread.start()
-	print "Server loop running in thread:", server_thread.name
 	return server
 
 def start_database():
@@ -61,7 +58,6 @@ if __name__ == "__main__":
 	try:
 		server_port_server.serve_forever()
 	except KeyboardInterrupt:
-		print "Exiting"
 		server_database.is_exiting = True
 		server_port_server.shutdown()
 	database_thread.join()
