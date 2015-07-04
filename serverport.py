@@ -24,7 +24,7 @@ class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 class ServerPortRequestHandlerImpl:
 	def handle_add_server(self, server_id, lines):
 		server_info = ServerInfo(server_id, lines)
-		print "Adding server " + str(server_info)
+		print "Adding server " + server_info.to_json()
 		server_database.add_server(server_info)
 
 	def handle_remove_server(self, server_id, lines):

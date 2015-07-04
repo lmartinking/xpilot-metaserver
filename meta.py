@@ -1,10 +1,13 @@
 #!/usr/bin/python
 
+import signal
 import socket
-import threading
 import SocketServer
+import sys
+import threading
 
 from clientport import *
+from database import *
 from serverport import *
 from userport import *
 
@@ -45,9 +48,20 @@ def start_user_port_server():
 	print "Server loop running in thread:", server_thread.name
 	return server
 
+def start_database():
+	database_thread = threading.Thread(target = ServerDatabase.handle, args = (server_database, 0))
+	database_thread.start()
+	return database_thread
+
 if __name__ == "__main__":
 	client_port_server = start_client_port_server()
 	server_port_server = start_server_port_server()
 	user_port_server = start_user_port_server()
-	server_port_server.serve_forever()
-	
+	database_thread = start_database()
+	try:
+		server_port_server.serve_forever()
+	except KeyboardInterrupt:
+		print "Exiting"
+		server_database.is_exiting = True
+		server_port_server.shutdown()
+	database_thread.join()

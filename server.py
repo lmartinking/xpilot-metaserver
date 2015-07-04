@@ -1,3 +1,4 @@
+import jsonpickle
 import time
 from player import *
 from team import *
@@ -21,6 +22,8 @@ class ServerInfo:
 		self.init_params()
 
 		self.server_id = server_id
+		self.update_time = int(time.time())
+
 		self.prev_command_str = None
 
 		for command_str in commands:
@@ -109,6 +112,7 @@ class ServerInfo:
 
 	def init_params(self):
 		self.server_id = None
+		self.uptime_time = None
 		self.server_name = None
 		self.version = None
 		self.map_name = None
@@ -152,6 +156,9 @@ class ServerInfo:
 			return None
 		return int(time.time()) - self.start_time
 
+	def get_time_since_update(self):
+		return int(time.time()) - self.update_time
+
 	def get_sound_str(self):
 		if self.sound:
 			return "yes"
@@ -163,3 +170,6 @@ class ServerInfo:
 
 	def is_valid(self):
 		return True
+
+	def to_json(self):
+		return jsonpickle.encode(self)
