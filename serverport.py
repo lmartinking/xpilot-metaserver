@@ -1,3 +1,4 @@
+
 import socket
 import threading
 import SocketServer
@@ -8,7 +9,7 @@ from database import *
 
 class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 	def handle(self):
-		print "Incoming server " + format(self.client_address[0]) + ":" + str(self.client_address[1])
+		logging.info("Incoming server " + format(self.client_address[0]) + ":" + str(self.client_address[1]))
 
 		data = self.request[0]
 		lines = data.split("\n")
@@ -24,12 +25,12 @@ class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 class ServerPortRequestHandlerImpl:
 	def handle_add_server(self, server_id, lines):
 		server_info = ServerInfo(server_id, lines)
-		print "Adding server " + server_info.to_json()
+		logging.info("Adding server " + server_info.to_json())
 		server_database.add_server(server_info)
 
 	def handle_remove_server(self, server_id, lines):
 		server_name = self.get_remove_server_name(lines)
-		print "Removing server " + str(server_id) + " with name " + server_name
+		logging.info("Removing server " + str(server_id) + " with name " + server_name)
 		server_database.remove_server(server_id)
 
 	def get_remove_server_name(self, lines):

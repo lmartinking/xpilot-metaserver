@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import logging
 import signal
 import socket
 import SocketServer
@@ -50,7 +51,11 @@ def start_database():
 	database_thread.start()
 	return database_thread
 
+def init_logging():
+	logging.basicConfig(filename='metaserver.log', format='%(asctime)s %(message)s', level=logging.DEBUG)
+
 if __name__ == "__main__":
+	init_logging()
 	client_port_server = start_client_port_server()
 	server_port_server = start_server_port_server()
 	user_port_server = start_user_port_server()

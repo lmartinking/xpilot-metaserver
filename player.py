@@ -1,3 +1,5 @@
+import logging
+
 class PlayerInfo:
 	def __init__(self, player_string):
 		self.name = None
@@ -9,13 +11,13 @@ class PlayerInfo:
 			# extract the team number
 			team_begin_idx = player_string.rfind("{")
 			if team_begin_idx == -1:
-				print "Missing { in the player string: " + player_string
+				logging.info("Missing { in the player string: " + player_string)
 				return
 
 			begin_idx = team_begin_idx + 1
 			end_idx = len(player_string) - 1
 			if begin_idx >= end_idx:
-				print "Missing team number in the player string: " + player_string
+				logging.info("Missing team number in the player string: " + player_string)
 				return
 			try:
 				self.team_num = int(player_string[begin_idx:end_idx])
@@ -24,29 +26,29 @@ class PlayerInfo:
 
 		host_begin_idx = player_string.rfind("@", 0, team_begin_idx)
 		if host_begin_idx == -1:
-			print "Missing @ in the player string: " + player_string
+			logging.info("Missing @ in the player string: " + player_string)
 			return
 		host_begin_idx2 = host_begin_idx + 1
 		host_end_idx = team_begin_idx
 		if host_begin_idx2 >= host_end_idx:
-			print "Missing hostname in the player string: " + player_string
+			logging.info("Missing hostname in the player string: " + player_string)
 			return
 		self.hostname = player_string[host_begin_idx2:host_end_idx]
 
 		realname_begin_idx = player_string.find("=")
 		if realname_begin_idx == -1:
-			print "Missing = in the player string: " + player_string
+			logging.info("Missing = in the player string: " + player_string)
 			return
 		realname_begin_idx2 = realname_begin_idx + 1
 		realname_end_idx = host_begin_idx
 		if realname_begin_idx2 >= realname_end_idx:
-			print "Missing realname in the player string: " + player_string
+			logging.info("Missing realname in the player string: " + player_string)
 			return
 		self.realname = player_string[realname_begin_idx2:realname_end_idx]
 
 		name_end_idx = realname_begin_idx
 		if name_end_idx == 0:
-			print "Missing name in the player string: " + player_string
+			logging.info("Missing name in the player string: " + player_string)
 			return
 		self.name = player_string[:name_end_idx]
 

@@ -1,3 +1,4 @@
+import logging
 import time
 
 class ServerDatabase:
@@ -34,7 +35,7 @@ class ServerDatabase:
 	def flush_timed_out_servers(self):
 		for server_info in self.servers.values():
 			if server_info.get_time_since_update() >= self.server_timeout:
-				print "Timed out server " + str(server_info.server_id)
+				logging.info("Timed out server " + str(server_info.server_id))
 				self.remove_server(server_info.server_id)
 
 server_database = ServerDatabase()
