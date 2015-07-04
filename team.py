@@ -1,6 +1,5 @@
 class TeamInfo:
 	def __init__(self, element):
-		self.valid = False
 		self.num = None
 		self.free_bases = None
 
@@ -15,7 +14,6 @@ class TeamInfo:
 			self.free_bases = int(team_tuple[1])
 		except ValueError:
 			return
-		self.valid = True
 
 	def __str__(self):
 		return "Team " + str(self.num) + ", free: " + str(self.free_bases)
@@ -24,4 +22,4 @@ class TeamInfo:
 		return self.num == other.num and self.free_bases == other.free_bases
 
 	def is_valid(self):
-		return self.valid
+		return (not self.num == None) and (not self.free_bases == None)

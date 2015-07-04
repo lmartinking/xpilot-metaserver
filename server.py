@@ -127,7 +127,7 @@ class ServerInfo:
 		self.timing = None
 		self.start_time = None
 		self.queue = None
-		self.sound = None
+		self.has_sound = None
 		self.players = []
 		self.status = None
 
@@ -160,15 +160,10 @@ class ServerInfo:
 		return int(time.time()) - self.update_time
 
 	def get_sound_str(self):
-		if self.sound:
-			return "yes"
-		else:
-			return "no"
-
-	def __str__(self):
-		return "server_id: " + format(self.server_id.ip_addr) + ":" + str(self.server_id.port) + " server_name: " + self.server_name + " version: " + self.version + " users: " + str(self.num_users) + " map: " + self.map_name + " sizeMap: " + self.map_size + " author: " + self.map_author + " bases: " + str(self.num_bases) + " fps: " + str(self.fps) + " port: " + str(self.server_id.port) + " mode: " + self.game_mode + " teams: " + str(self.num_teams) + " free: " + self.free_to_string() + " timing: " + str(self.timing) + " stime: " + str(self.start_time) + " queue: " + str(self.queue) + " sound: " + str(self.has_sound) + " players: " + self.players_to_string() + " status: " + self.status
+		return "yes" if self.has_sound else "no"
 
 	def is_valid(self):
+		# TODO implement
 		return True
 
 	def to_json(self):

@@ -60,4 +60,5 @@ class PlayerInfo:
 		return s
 
 	def is_valid(self):
+		# TODO implement
 		return True
