@@ -112,7 +112,7 @@ class ServerInfo:
 
 	def init_params(self):
 		self.server_id = None
-		self.uptime_time = None
+		self.update_time = None
 		self.server_name = None
 		self.version = None
 		self.map_name = None
