@@ -27,11 +27,13 @@ class ServerPortRequestHandlerImpl:
 		server_info = ServerInfo(server_id, lines)
 		logging.info("Adding server " + server_info.to_json())
 		server_database.add_server(server_info)
+		server_database.write_to_file()
 
 	def handle_remove_server(self, server_id, lines):
 		server_name = self.get_remove_server_name(lines)
 		logging.info("Removing server " + str(server_id) + " with name " + server_name)
 		server_database.remove_server(server_id)
+		server_database.write_to_file()
 
 	def get_remove_server_name(self, lines):
 		if len(lines) != 2 or lines[1] != "remove":
