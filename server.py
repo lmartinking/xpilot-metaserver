@@ -74,7 +74,7 @@ class ServerInfo:
 					pass
 			elif command == "stime":
 				try:
-					self.start_time = int(params)
+					self.start_time = int(time.time()) - int(params)
 				except ValueError:
 					pass
 			elif command == "queue":
@@ -155,6 +155,8 @@ class ServerInfo:
 	def to_json(self):
 		return jsonpickle.encode(self)
 
+	# We compare all fields received from the server except uptime.
+	# The reason is that we calculate start time based on uptime and sometimes there may be discrepancies by +-1 second, depending on clock skew and lag.
 	def equals_info_from_server(self, other):
-		return self.server_id == other.server_id and self.server_name == other.server_name and self.version == other.version and self.map_name == other.map_name and self.map_size == other.map_size and self.map_author == other.map_author and self.num_users == other.num_users and self.num_bases == other.num_bases and self.fps == other.fps and self.game_mode == other.game_mode and self.num_teams == other.num_teams and self.num_free_bases_per_team == other.num_free_bases_per_team and self.timing == other.timing and self.start_time == other.start_time and self.queue == other.queue and self.has_sound == other.has_sound and self.players == other.players and self.status == other.status
+		return self.server_id == other.server_id and self.server_name == other.server_name and self.version == other.version and self.map_name == other.map_name and self.map_size == other.map_size and self.map_author == other.map_author and self.num_users == other.num_users and self.num_bases == other.num_bases and self.fps == other.fps and self.game_mode == other.game_mode and self.num_teams == other.num_teams and self.num_free_bases_per_team == other.num_free_bases_per_team and self.timing == other.timing and self.queue == other.queue and self.has_sound == other.has_sound and self.players == other.players and self.status == other.status
 
