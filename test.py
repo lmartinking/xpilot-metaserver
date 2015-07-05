@@ -157,8 +157,9 @@ class TestPlayerInfoTiming(unittest.TestCase):
 
 class TestPlayerInfoStartTime(unittest.TestCase):
 	def setUp(self):
-		self.start_time = 0
-		data = "add stime " + str(self.start_time)
+		self.start_time = 1400000000
+		uptime = (int)(time.time()) - self.start_time
+		data = "add stime " + str(uptime)
 		self.lines = data.split("\n")
 
 	def test(self):
