@@ -1,0 +1,13 @@
+What is this?
+-------------
+This is an open source implementation of the XPilot meta server, i.e. the server that all 
+public XPilot game servers register with in order to be discovered by clients. This implementation
+has been written based on analysis of the server and client source code. See the file PROTOCOL for 
+details.
+
+This implementation may be incomplete. Please contact the author(s) if you have questions or bug reports.
+
+Contributors
+------------
+Piotr Kamisiński <rotunda_pk@users.sourceforge.net>
+
