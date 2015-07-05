@@ -11,7 +11,6 @@ from team import *
 class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 	def handle(self):
 		server_id = IpAddrPort(self.client_address[0], self.client_address[1])
-		logging.info("Server " + str(server_id))
 
 		data = self.request[0]
 		lines = data.split("\n")
@@ -32,7 +31,9 @@ class ServerPortRequestHandlerImpl:
 		database_changed = False
 		if server_info_prev:
 			unchanged = server_info_prev.equals_info_from_server(server_info)
-			if not unchanged:
+			if unchanged:
+				logging.debug("Server " + str(server_id) + " : has not changed")
+			else:
 				server_database.add_server(server_info)
 				database_changed = True
 				logging.info("Server " + str(server_id) + " : updated " + server_info.to_json())
