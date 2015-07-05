@@ -259,17 +259,6 @@ class TestCommandTypeRemoveServer(unittest.TestCase):
 		command_type = CommandType(self.lines)
 		self.assertTrue(command_type.is_remove_server())
 
-class TestRemoveServerGetServerName(unittest.TestCase):
-	def setUp(self):
-		self.server_name = "localhost"
-		data = "server " + self.server_name + "\nremove"
-		self.lines = data.split("\n")
-
-	def test(self):
-		handler = ServerPortRequestHandlerImpl()
-		server_name = handler.get_remove_server_name(self.lines)
-		self.assertTrue(server_name, self.server_name)
-
 class TestCommandTypeEmptyInvalid(unittest.TestCase):
 	def setUp(self):
 		data = ""

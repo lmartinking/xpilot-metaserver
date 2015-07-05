@@ -1,13 +1,15 @@
 import logging
 import socket
 from socket import SHUT_RDWR
-import threading
 import SocketServer
+import threading
+from common import *
 from database import *
 
 class ClientPortRequestHandler(SocketServer.StreamRequestHandler):
 	def handle(self):
-		logging.info("Incoming client " + format(self.client_address[0]) + ":" + str(self.client_address[1]))
+		client_id = IpAddrPort(self.client_address[0], self.client_address[1])
+		logging.info("Client " + str(client_id))
 
 		for server_info in server_database.get_servers():
 			to_send = server_info.to_string_client() + "\n"

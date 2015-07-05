@@ -1,26 +1,29 @@
-
+import base64
 import socket
-import threading
 import SocketServer
-from server import *
-from player import *
-from team import *
+import threading
+from common import *
 from database import *
+from player import *
+from server import *
+from team import *
 
 class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 	def handle(self):
-		logging.info("Incoming server " + format(self.client_address[0]) + ":" + str(self.client_address[1]))
+		server_id = IpAddrPort(self.client_address[0], self.client_address[1])
+		logging.info("Server " + str(server_id))
 
 		data = self.request[0]
 		lines = data.split("\n")
 		command_type = CommandType(lines)
 
-		server_id = ServerId(self.client_address[0], self.client_address[1])
 		handler = ServerPortRequestHandlerImpl()
 		if command_type.is_add_server():
 			handler.handle_add_server(server_id, lines)
 		elif command_type.is_remove_server():
 			handler.handle_remove_server(server_id, lines)
+		else:
+			logging.debug("Server " + str(server_id) + " : invalid command (Base64) " + base64.b64encode(data))
 
 class ServerPortRequestHandlerImpl:
 	def handle_add_server(self, server_id, lines):
@@ -32,21 +35,21 @@ class ServerPortRequestHandlerImpl:
 			if not unchanged:
 				server_database.add_server(server_info)
 				database_changed = True
-				logging.info("Updated server " + server_info.to_json())
+				logging.info("Server " + str(server_id) + " : updated " + server_info.to_json())
 		else:
 			server_database.add_server(server_info)
 			database_changed = True
-			logging.info("Added server " + server_info.to_json())
+			logging.info("Server " + str(server_id) + " : added " + server_info.to_json())
 		if database_changed:
 			server_database.write_to_file()
 
 	def handle_remove_server(self, server_id, lines):
 		removed = server_database.remove_server(server_id)
 		if removed:
-			logging.info("Removed server " + str(server_id))
+			logging.info("Server " + str(server_id) + " : removed " + str(server_id))
 			server_database.write_to_file()
 		else:
-			logging.info("Server " + str(server_id) + " not in database")
+			logging.info("Server " + str(server_id) + " : not in database")
 
 class CommandType:
 	def __init__(self, subcommands_lines):
