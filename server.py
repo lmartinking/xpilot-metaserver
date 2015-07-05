@@ -8,7 +8,7 @@ class ServerInfo:
 		self.init_params()
 
 		self.server_id = server_id
-		self.update_time = int(time.time())
+		self.update_time = time.time()
 
 		prev_command_str = None
 
@@ -147,7 +147,7 @@ class ServerInfo:
 		return int(time.time()) - self.start_time
 
 	def get_time_since_update(self):
-		return int(time.time()) - self.update_time
+		return time.time() - self.update_time
 
 	def get_sound_str(self):
 		return "yes" if self.has_sound else "no"
