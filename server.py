@@ -15,7 +15,7 @@ class ServerId:
 		return hash((self.ip_addr, self.port))
 
 	def __str__(self):
-		return "ip_addr=" + format(self.ip_addr) + " port=" + str(self.port)
+		return format(self.ip_addr) + ":" + str(self.port)
 
 class ServerInfo:
 	def __init__(self, server_id, commands):
@@ -168,3 +168,7 @@ class ServerInfo:
 
 	def to_json(self):
 		return jsonpickle.encode(self)
+
+	def equals_info_from_server(self, other):
+		return self.server_id == other.server_id and self.server_name == other.server_name and self.version == other.version and self.map_name == other.map_name and self.map_size == other.map_size and self.map_author == other.map_author and self.num_users == other.num_users and self.num_bases == other.num_bases and self.fps == other.fps and self.game_mode == other.game_mode and self.num_teams == other.num_teams and self.num_free_bases_per_team == other.num_free_bases_per_team and self.timing == other.timing and self.start_time == other.start_time and self.queue == other.queue and self.has_sound == other.has_sound and self.players == other.players and self.status == other.status
+

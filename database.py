@@ -9,17 +9,24 @@ class ServerDatabase:
 		self.server_timeout = 5*60;
 
 	def add_server(self, server_info):
-		status = 0
-		if server_info.server_id in self.servers:
-			status = 1
 		self.servers[server_info.server_id] = server_info
-		return status
 
 	def remove_server(self, server_id):
-		self.servers.pop(server_id)
+		removed = False
+		try:
+			self.servers.pop(server_id)
+			removed = True
+		except KeyError:
+			pass
+		return removed
 
 	def get_server(self, server_id):
-		return self.servers[server_id]
+		server_info = None
+		try:
+			server_info = self.servers[server_id]
+		except KeyError:
+			pass
+		return server_info
 
 	def get_servers(self):
 		return self.servers.values()

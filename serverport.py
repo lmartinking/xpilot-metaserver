@@ -15,8 +15,8 @@ class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 		lines = data.split("\n")
 		command_type = CommandType(lines)
 
-		handler = ServerPortRequestHandlerImpl()
 		server_id = ServerId(self.client_address[0], self.client_address[1])
+		handler = ServerPortRequestHandlerImpl()
 		if command_type.is_add_server():
 			handler.handle_add_server(server_id, lines)
 		elif command_type.is_remove_server():
@@ -25,23 +25,28 @@ class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 class ServerPortRequestHandlerImpl:
 	def handle_add_server(self, server_id, lines):
 		server_info = ServerInfo(server_id, lines)
-		logging.info("Adding server " + server_info.to_json())
-		server_database.add_server(server_info)
-		server_database.write_to_file()
+		server_info_prev = server_database.get_server(server_id)
+		database_changed = False
+		if server_info_prev:
+			unchanged = server_info_prev.equals_info_from_server(server_info)
+			if not unchanged:
+				server_database.add_server(server_info)
+				database_changed = True
+				logging.info("Updated server " + server_info.to_json())
+		else:
+			server_database.add_server(server_info)
+			database_changed = True
+			logging.info("Added server " + server_info.to_json())
+		if database_changed:
+			server_database.write_to_file()
 
 	def handle_remove_server(self, server_id, lines):
-		server_name = self.get_remove_server_name(lines)
-		logging.info("Removing server " + str(server_id) + " with name " + server_name)
-		server_database.remove_server(server_id)
-		server_database.write_to_file()
-
-	def get_remove_server_name(self, lines):
-		if len(lines) != 2 or lines[1] != "remove":
-			return None
-		elements = lines[0].split(" ")
-		if len(elements) != 2:
-			return None
-		return elements[1]
+		removed = server_database.remove_server(server_id)
+		if removed:
+			logging.info("Removed server " + str(server_id))
+			server_database.write_to_file()
+		else:
+			logging.info("Server " + str(server_id) + " not in database")
 
 class CommandType:
 	def __init__(self, subcommands_lines):
