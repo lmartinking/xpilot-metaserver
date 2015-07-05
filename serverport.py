@@ -3,7 +3,6 @@ import socket
 import SocketServer
 import threading
 from common import *
-from database import *
 from player import *
 from server import *
 from team import *
@@ -16,7 +15,7 @@ class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 		lines = data.split("\n")
 		command_type = CommandType(lines)
 
-		handler = ServerPortRequestHandlerImpl()
+		handler = ServerPortRequestHandlerImpl(self.server.server_database)
 		if command_type.is_add_server():
 			handler.handle_add_server(server_id, lines)
 		elif command_type.is_remove_server():
@@ -25,30 +24,33 @@ class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 			logging.debug("Server " + str(server_id) + " : invalid command (Base64) " + base64.b64encode(data))
 
 class ServerPortRequestHandlerImpl:
+	def __init__(self, server_database):
+		self.server_database = server_database
+
 	def handle_add_server(self, server_id, lines):
 		server_info = ServerInfo(server_id, lines)
-		server_info_prev = server_database.get_server(server_id)
+		server_info_prev = self.server_database.get_server(server_id)
 		database_changed = False
 		if server_info_prev:
 			unchanged = server_info_prev.equals_info_from_server(server_info)
 			if unchanged:
 				logging.debug("Server " + str(server_id) + " : has not changed")
 			else:
-				server_database.add_server(server_info)
+				self.server_database.add_server(server_info)
 				database_changed = True
 				logging.info("Server " + str(server_id) + " : updated " + server_info.to_json())
 		else:
-			server_database.add_server(server_info)
+			self.server_database.add_server(server_info)
 			database_changed = True
 			logging.info("Server " + str(server_id) + " : added " + server_info.to_json())
 		if database_changed:
-			server_database.write_to_file()
+			self.server_database.write_to_file()
 
 	def handle_remove_server(self, server_id, lines):
-		removed = server_database.remove_server(server_id)
+		removed = self.server_database.remove_server(server_id)
 		if removed:
-			logging.info("Server " + str(server_id) + " : removed " + str(server_id))
-			server_database.write_to_file()
+			logging.info("Server " + str(server_id) + " : removed")
+			self.server_database.write_to_file()
 		else:
 			logging.info("Server " + str(server_id) + " : not in database")
 
