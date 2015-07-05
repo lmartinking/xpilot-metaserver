@@ -52,7 +52,7 @@ def start_database():
 	return database_thread
 
 def init_logging():
-	logging.basicConfig(filename='metaserver.log', format='%(asctime)s %(message)s', level=logging.DEBUG)
+	logging.basicConfig(filename='metaserver.log', format='%(asctime)s %(message)s', level=logging.INFO)
 
 if __name__ == "__main__":
 	init_logging()
