@@ -11,3 +11,7 @@ class IpAddrPort:
 
 	def __str__(self):
 		return format(self.ip_addr) + ":" + str(self.port)
+
+# Little-endian
+def int_to_bytes(val, num_bytes):
+	return [(val & (0xff << pos*8)) >> pos*8 for pos in range(num_bytes)]

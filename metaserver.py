@@ -18,6 +18,7 @@ client_port = 4401
 server_port = 5500
 user_port = 4400
 server_timeout = 10*60	# in seconds
+ping_timeout = 2	# in seconds
 servers_file = "servers.txt"
 log_file = "metaserver.log"
 
@@ -36,15 +37,16 @@ def start_client_port_server(server_database):
 	logging.info("Started client port thread at " + format(HOST) + ":" + str(PORT))
 	return server
 
-def start_server_port_server(server_database):
+def start_server_port_server(server_database, ping_timeout):
 	HOST, PORT = host, server_port
 	server = ServerPortServer((HOST, PORT), ServerPortRequestHandler)
 	server.server_database = server_database
+	server.ping_timeout = ping_timeout
 	ip, port = server.server_address
 	server_thread = threading.Thread(target=server.serve_forever)
 	server_thread.daemon = True
 	server_thread.start()
-	logging.info("Started server port thread at " + format(HOST) + ":" + str(PORT))
+	logging.info("Started server port thread at " + format(HOST) + ":" + str(PORT) + " with ping_timeout=" + str(ping_timeout))
 	return server
 
 def start_user_port_server():
@@ -66,13 +68,13 @@ def start_database(server_timeout, servers_file):
 	return (database_thread, server_database)
 
 def init_logging(log_file):
-	logging.basicConfig(filename = log_file, format = "%(asctime)s %(message)s", level = logging.INFO)
+	logging.basicConfig(filename = log_file, format = "%(asctime)s %(message)s", level = logging.DEBUG)
 
 if __name__ == "__main__":
 	init_logging(log_file)
 	logging.info("Starting XPilot MetaServer " + meta_version)
 	(database_thread, server_database) = start_database(server_timeout, servers_file)
-	server_port_server = start_server_port_server(server_database)
+	server_port_server = start_server_port_server(server_database, ping_timeout)
 	client_port_server = start_client_port_server(server_database)
 	user_port_server = start_user_port_server()
 	try:

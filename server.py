@@ -97,8 +97,7 @@ class ServerInfo:
 				self.status = params
 
 	def init_params(self):
-		self.server_id = None
-		self.update_time = None
+		# parameters received from the game server
 		self.server_name = None
 		self.version = None
 		self.map_name = None
@@ -116,6 +115,11 @@ class ServerInfo:
 		self.has_sound = None
 		self.players = []
 		self.status = None
+
+		# parameters computed by the meta server
+		self.server_id = None
+		self.update_time = None
+		self.rtt = None
 
 	def free_to_string(self):
 		s = ""

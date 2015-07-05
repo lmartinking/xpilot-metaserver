@@ -57,3 +57,4 @@ class ServerDatabase:
 		json_str = jsonpickle.encode(self.servers.values())
 		file.write(json_str)
 		file.close()
+		logging.debug("Written database to file")
