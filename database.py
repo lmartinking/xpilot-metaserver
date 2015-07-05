@@ -3,10 +3,10 @@ import logging
 import time
 
 class ServerDatabase:
-	def __init__(self):
+	def __init__(self, server_timeout):
 		self.servers = dict()
 		self.is_exiting = False
-		self.server_timeout = 5*60;
+		self.server_timeout = server_timeout;
 
 	def add_server(self, server_info):
 		self.servers[server_info.server_id] = server_info
