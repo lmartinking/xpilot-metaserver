@@ -13,6 +13,7 @@ class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 		server_id = IpAddrPort(self.client_address[0], self.client_address[1])
 
 		data = self.request[0]
+		logging.debug("Received " + data)
 		lines = data.split("\n")
 		command_type = CommandType(lines)
 
@@ -114,8 +115,10 @@ class CommandType:
 		if first.startswith("add "):
 			self.type = 0
 		elif first.startswith("server "):
-			if len(subcommands_lines) == 2 and subcommands_lines[1] == "remove":
-				self.type = 1
+			if len(subcommands_lines) == 2:
+				second = subcommands_lines[1].rstrip("\0")
+				if second == "remove":
+					self.type = 1
 
 	def is_add_server(self):
 		return self.type == 0

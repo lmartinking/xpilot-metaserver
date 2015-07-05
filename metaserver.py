@@ -68,7 +68,7 @@ def start_database(server_timeout, servers_file):
 	return (database_thread, server_database)
 
 def init_logging(log_file):
-	logging.basicConfig(filename = log_file, format = "%(asctime)s %(message)s", level = logging.DEBUG)
+	logging.basicConfig(filename = log_file, format = "%(asctime)s %(message)s", level = logging.INFO)
 
 if __name__ == "__main__":
 	init_logging(log_file)
