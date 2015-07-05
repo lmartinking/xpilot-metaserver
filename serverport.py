@@ -3,6 +3,7 @@ import select
 import socket
 import SocketServer
 import threading
+import time
 from common import *
 from player import *
 from server import *
@@ -91,6 +92,7 @@ class ServerPortRequestHandlerImpl:
 				self.server_database.add_server(server_info)
 				added = True
 				logging.info("Server " + str(server_id) + " : updated " + server_info.to_json())
+			server_info_prev.update_time = server_info.update_time
 		else:
 			self.server_database.add_server(server_info)
 			added = True
