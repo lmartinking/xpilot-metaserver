@@ -19,6 +19,7 @@ server_port = 5500
 user_port = 4400
 server_timeout = 10*60	# in seconds
 servers_file = "servers.txt"
+log_file = "metaserver.log"
 
 # parameters - do not change
 meta_version = "0.1"
@@ -64,11 +65,11 @@ def start_database(server_timeout, servers_file):
 	logging.info("Started server database with server_timeout=" + str(server_timeout) + ", servers_file=" + servers_file)
 	return (database_thread, server_database)
 
-def init_logging():
-	logging.basicConfig(filename='metaserver.log', format='%(asctime)s %(message)s', level=logging.INFO)
+def init_logging(log_file):
+	logging.basicConfig(filename = log_file, format = "%(asctime)s %(message)s", level = logging.INFO)
 
 if __name__ == "__main__":
-	init_logging()
+	init_logging(log_file)
 	logging.info("Starting XPilot MetaServer " + meta_version)
 	(database_thread, server_database) = start_database(server_timeout, servers_file)
 	server_port_server = start_server_port_server(server_database)
