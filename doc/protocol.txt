@@ -1,5 +1,6 @@
-client protocol:
-syntax: "$0:$1:...:$17"
+1. Format of the message received by client
+
+"$0:$1:...:$17"
 
 0 string version
 1 string hostname
@@ -22,10 +23,11 @@ Empty?
 16 string freebases
 17 unsigned queue
 
-server protocol:
+2. Format of the message sent by server
+
 Each message is sent with the trailing zero.
 Each message consists of one or more commands. Each command is terminated with '\n'.
-- add	
+a) Add server
 "add server $Server.host
 add version $META_VERSION
 add users $num_active_players
@@ -57,12 +59,18 @@ add status $status_str
 
 game_mode: if game_lock: "locked", else "ok"
 
-- remove
-syntax: "server ${serverhost}
+b) Remove server
+"server ${serverhost}
 remove\0"
 
-Ports:
-- server: udp/5500
-- client (meta prog port): tcp/4401
-- user: tcp/4400
+In order to hinder unauthorised removal of servers from the database, the meta
+server does not use serverhost to determine the server to remove. It uses the
+remote ip_addr:port instead.
+
+
+3. Communication ports
+
+a) server: udp/5500
+b) client (meta prog port): tcp/4401
+c) user: tcp/4400
 
