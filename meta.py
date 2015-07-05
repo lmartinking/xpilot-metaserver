@@ -18,6 +18,7 @@ client_port = 4401
 server_port = 5500
 user_port = 4400
 server_timeout = 10*60	# in seconds
+servers_file = "servers.txt"
 
 # parameters - do not change
 meta_version = "0.1"
@@ -56,11 +57,11 @@ def start_user_port_server():
 	logging.info("Started user port thread at " + format(HOST) + ":" + str(PORT))
 	return server
 
-def start_database(server_timeout):
-	server_database = ServerDatabase(server_timeout)
+def start_database(server_timeout, servers_file):
+	server_database = ServerDatabase(server_timeout, servers_file)
 	database_thread = threading.Thread(target = ServerDatabase.handle, args = (server_database, None))
 	database_thread.start()
-	logging.info("Started server database with server_timeout=" + str(server_timeout))
+	logging.info("Started server database with server_timeout=" + str(server_timeout) + ", servers_file=" + servers_file)
 	return (database_thread, server_database)
 
 def init_logging():
@@ -69,7 +70,7 @@ def init_logging():
 if __name__ == "__main__":
 	init_logging()
 	logging.info("Starting XPilot MetaServer " + meta_version)
-	(database_thread, server_database) = start_database(server_timeout)
+	(database_thread, server_database) = start_database(server_timeout, servers_file)
 	server_port_server = start_server_port_server(server_database)
 	client_port_server = start_client_port_server(server_database)
 	user_port_server = start_user_port_server()

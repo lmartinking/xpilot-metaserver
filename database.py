@@ -3,10 +3,11 @@ import logging
 import time
 
 class ServerDatabase:
-	def __init__(self, server_timeout):
+	def __init__(self, server_timeout, servers_file):
 		self.servers = dict()
 		self.is_exiting = False
 		self.server_timeout = server_timeout;
+		self.servers_file = servers_file
 
 	def add_server(self, server_info):
 		self.servers[server_info.server_id] = server_info
@@ -52,7 +53,7 @@ class ServerDatabase:
 		return flushed_count
 
 	def write_to_file(self):
-		file = open("servers.txt", "w")
+		file = open(self.servers_file, "w")
 		json_str = jsonpickle.encode(self.servers.values())
 		file.write(json_str)
 		file.close()
