@@ -89,6 +89,8 @@ class ServerPortRequestHandlerImpl:
 			if unchanged:
 				logging.debug("Server " + str(server_id) + " : has not changed")
 			else:
+				# TODO get rid of this when periodic pinging of servers is implemented
+				server_info.rtt = server_info_prev.rtt
 				self.server_database.add_server(server_info)
 				added = True
 				logging.info("Server " + str(server_id) + " : updated " + server_info.to_json())
