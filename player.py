@@ -23,6 +23,8 @@ class PlayerInfo:
 				self.team_num = int(player_string[begin_idx:end_idx])
 			except ValueError:
 				return
+		else:
+			team_begin_idx = len(player_string)-1
 
 		host_begin_idx = player_string.rfind("@", 0, team_begin_idx)
 		if host_begin_idx == -1:
