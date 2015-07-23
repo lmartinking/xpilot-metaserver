@@ -7,7 +7,7 @@ class TeamInfo:
 		if len(team_tuple) < 2:
 			return
 		
-		if self.num == "":
+		if team_tuple[0] == "":
 			self.num = -1
 		else:
 			try:
