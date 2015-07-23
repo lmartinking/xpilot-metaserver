@@ -125,7 +125,9 @@ class ServerInfo:
 		s = ""
 		for i in range(len(self.num_free_bases_per_team)):
 			team = self.num_free_bases_per_team[i]
-			s = s + str(team.num) + "=" + str(team.free_bases)
+			if team.num != -1:
+				s = s + str(team.num)
+			s = s + "=" + str(team.free_bases)
 			if i < len(self.num_free_bases_per_team) - 1:
 				s += ","
 		return s
