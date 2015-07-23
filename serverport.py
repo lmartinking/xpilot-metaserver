@@ -13,7 +13,7 @@ class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 	def handle(self):
 		server_id = IpAddrPort(self.client_address[0], self.client_address[1])
 
-		data = self.request[0].rstrip("\0")
+		data = self.request[0].rstrip("\0").decode("iso-8859-1").encode("utf-8")
 		logging.debug("Received " + data)
 		lines = data.split("\n")
 		command_type = CommandType(lines)

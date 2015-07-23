@@ -13,6 +13,7 @@ class ClientPortRequestHandler(SocketServer.StreamRequestHandler):
 		for server_info in self.server.server_database.get_servers():
 			if not server_info.rtt == None:
 				to_send = server_info.to_string_client() + "\n"
+				to_send_iso = to_send.encode("iso-8859-1")
 				self.wfile.write(to_send)
 
 		socket = self.request
