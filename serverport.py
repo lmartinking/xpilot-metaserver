@@ -38,10 +38,10 @@ class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 		if received:
 			time_after = time.time()
 			server_info.rtt = time_after - time_before
-			logging.debug("RTT is " + str(server_info.rtt) + " seconds")
+			logging.info("Server " + str(server_info.server_id) + " : RTT is " + str(server_info.rtt) + " seconds")
 		else:
 			server_info.rtt = None
-			logging.debug("Ping timed out")
+			logging.info("Server " + str(server_info.server_id) + " : ping timed out")
 
 	def send_and_receive_ping(self, sock, server_info):
 		source_port = sock.getsockname()[1]
