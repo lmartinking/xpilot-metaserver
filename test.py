@@ -127,6 +127,18 @@ class TestPlayerInfoNumFreeBasesPerTeam(unittest.TestCase):
 		server = ServerInfo(None, self.lines)
 		self.assertEqual(server.num_free_bases_per_team, self.expected)
 
+class TestPlayerInfoNumFreeBasesPerTeamNoTeams(unittest.TestCase):
+	def setUp(self):
+		data = "add free =24"
+		self.expected = []
+		team = TeamInfo("=24")
+		self.expected.append(team)
+		self.lines = data.split("\n")
+
+	def test(self):
+		server = ServerInfo(None, self.lines)
+		self.assertEqual(server.num_free_bases_per_team, self.expected)
+
 class TestTeamInfo(unittest.TestCase):
 	def setUp(self):
 		pass
