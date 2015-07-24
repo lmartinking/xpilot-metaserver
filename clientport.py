@@ -19,8 +19,8 @@ class ClientPortRequestHandler(SocketServer.StreamRequestHandler):
 			socket = self.request
 			socket.shutdown(SHUT_RDWR)
 			socket.close()
-		except Exception:
-			logging.exception()
+		except Exception, e:
+			logging.exception(e)
 
 class ClientPortServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
 	pass

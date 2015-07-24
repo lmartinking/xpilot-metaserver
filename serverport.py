@@ -32,8 +32,8 @@ class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 					self.server.server_database.write_to_file()
 			else:
 				logging.debug("Server " + str(server_id) + " : invalid command (Base64) " + base64.b64encode(data))
-		except Exception:
-			logging.exception()
+		except Exception, e:
+			logging.exception(e)
 
 	def get_server_rtt(self, server_info):
 		time_before = time.time()
