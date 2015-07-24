@@ -11,16 +11,19 @@ from clientport import *
 from database import *
 from serverport import *
 from userport import *
+from faqport import *
 
 # parameters - change if necessary
 host = "0.0.0.0"
 client_port = 4401
 server_port = 5500
 user_port = 4400
+faq_port = 4402
 server_timeout = 10*60	# in seconds
 ping_timeout = 2	# in seconds
 servers_file = "servers.txt"
 log_file = "metaserver.log"
+faq_file = "FAQ"
 
 # parameters - do not change
 meta_version = "0.1"
@@ -60,6 +63,18 @@ def start_user_port_server():
 	logging.info("Started user port thread at " + format(HOST) + ":" + str(PORT))
 	return server
 
+def start_faq_port_server():
+	HOST, PORT = host, faq_port
+	SocketServer.TCPServer.allow_reuse_address = True
+	server = FaqPortServer((HOST, PORT), FaqPortRequestHandler)
+	server.faq_file = faq_file
+	ip, port = server.server_address
+	server_thread = threading.Thread(target=server.serve_forever)
+	server_thread.daemon = True
+	server_thread.start()
+	logging.info("Started FAQ port thread at " + format(HOST) + ":" + str(PORT))
+	return server
+
 def start_database(server_timeout, servers_file):
 	server_database = ServerDatabase(server_timeout, servers_file)
 	database_thread = threading.Thread(target = ServerDatabase.handle, args = (server_database, None))
@@ -77,6 +92,7 @@ if __name__ == "__main__":
 	server_port_server = start_server_port_server(server_database, ping_timeout)
 	client_port_server = start_client_port_server(server_database)
 	user_port_server = start_user_port_server()
+	faq_port_server = start_faq_port_server()
 	try:
 		server_port_server.serve_forever()
 	except KeyboardInterrupt:
