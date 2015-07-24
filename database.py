@@ -55,6 +55,6 @@ class ServerDatabase:
 	def write_to_file(self):
 		file = open(self.servers_file, "w")
 		json_str = jsonpickle.encode(self.servers.values())
-		file.write(json_str)
+		file.write(json_str.encode("utf-8"))
 		file.close()
 		logging.debug("Written database to file")

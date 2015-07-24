@@ -14,7 +14,8 @@ class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 		try:
 			server_id = IpAddrPort(self.client_address[0], self.client_address[1])
 
-			data = self.request[0].rstrip("\0").decode("iso-8859-1").encode("utf-8")
+			data_nozero = self.request[0].rstrip("\0")
+			to_unicode_if_string(data_nozero, "iso-8859-1")
 			logging.debug("Received " + data)
 			lines = data.split("\n")
 			command_type = CommandType(lines)

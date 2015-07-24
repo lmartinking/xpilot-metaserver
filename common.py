@@ -15,3 +15,9 @@ class IpAddrPort:
 # Little-endian
 def int_to_bytes(val, num_bytes):
 	return [(val & (0xff << pos*8)) >> pos*8 for pos in range(num_bytes)]
+
+def to_unicode_if_string(obj, encoding="utf-8"):
+	if isinstance(obj, basestring):
+		if not isinstance(obj, unicode):
+			obj = unicode(obj, encoding)
+	return obj
