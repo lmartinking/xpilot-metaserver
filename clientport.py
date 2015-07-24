@@ -7,18 +7,21 @@ from common import *
 
 class ClientPortRequestHandler(SocketServer.StreamRequestHandler):
 	def handle(self):
-		client_id = IpAddrPort(self.client_address[0], self.client_address[1])
-		logging.info("Client " + str(client_id))
+		try:
+			client_id = IpAddrPort(self.client_address[0], self.client_address[1])
+			logging.info("Client " + str(client_id))
 
-		for server_info in self.server.server_database.get_servers():
-			if not server_info.rtt == None:
-				to_send = server_info.to_string_client() + "\n"
-				to_send_iso = to_send.encode("iso-8859-1")
-				self.wfile.write(to_send)
+			for server_info in self.server.server_database.get_servers():
+				if not server_info.rtt == None:
+					to_send = server_info.to_string_client() + "\n"
+					to_send_iso = to_send.encode("iso-8859-1")
+					self.wfile.write(to_send)
 
-		socket = self.request
-		socket.shutdown(SHUT_RDWR)
-		socket.close()
+			socket = self.request
+			socket.shutdown(SHUT_RDWR)
+			socket.close()
+		except Exception:
+			logging.exception()
 
 class ClientPortServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
 	pass

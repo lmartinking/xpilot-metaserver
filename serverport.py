@@ -11,25 +11,28 @@ from team import *
 
 class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 	def handle(self):
-		server_id = IpAddrPort(self.client_address[0], self.client_address[1])
+		try:
+			server_id = IpAddrPort(self.client_address[0], self.client_address[1])
 
-		data = self.request[0].rstrip("\0").decode("iso-8859-1").encode("utf-8")
-		logging.debug("Received " + data)
-		lines = data.split("\n")
-		command_type = CommandType(lines)
+			data = self.request[0].rstrip("\0").decode("iso-8859-1").encode("utf-8")
+			logging.debug("Received " + data)
+			lines = data.split("\n")
+			command_type = CommandType(lines)
 
-		handler = ServerPortRequestHandlerImpl(self.server.server_database)
-		if command_type.is_add_server():
-			server_info = handler.handle_add_server(server_id, lines)
-			if server_info:
-				self.get_server_rtt(server_info)
-				self.server.server_database.write_to_file()
-		elif command_type.is_remove_server():
-			removed = handler.handle_remove_server(server_id, lines)
-			if removed:
-				self.server.server_database.write_to_file()
-		else:
-			logging.debug("Server " + str(server_id) + " : invalid command (Base64) " + base64.b64encode(data))
+			handler = ServerPortRequestHandlerImpl(self.server.server_database)
+			if command_type.is_add_server():
+				server_info = handler.handle_add_server(server_id, lines)
+				if server_info:
+					self.get_server_rtt(server_info)
+					self.server.server_database.write_to_file()
+			elif command_type.is_remove_server():
+				removed = handler.handle_remove_server(server_id, lines)
+				if removed:
+					self.server.server_database.write_to_file()
+			else:
+				logging.debug("Server " + str(server_id) + " : invalid command (Base64) " + base64.b64encode(data))
+		except Exception:
+			logging.exception()
 
 	def get_server_rtt(self, server_info):
 		time_before = time.time()
