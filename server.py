@@ -141,7 +141,7 @@ class ServerInfo:
 		return s
 
 	def to_string_client(self):
-		return self.version + ":" + self.server_name + ":" + str(self.server_id.port) + ":" + str(self.num_users) + ":" + self.map_name + ":" + self.map_size + ":" + self.map_author + ":ok:" + str(self.num_bases) + ":" + str(self.fps) + "::" + self.get_sound_str() + ":" + str(self.get_uptime()) + ":" + str(self.get_num_free_teams()) + ":" + str(self.timing) + ":" + format(self.server_id.ip_addr) + ":" + self.free_to_string() + ":" + str(self.queue)
+		return self.version + ":" + self.server_name + ":" + str(self.server_id.port) + ":" + str(self.num_users) + ":" + self.map_name + ":" + self.map_size + ":" + self.map_author + ":ok:" + str(self.num_bases) + ":" + str(self.fps) + ":" + self.players_to_string() + ":" + self.get_sound_str() + ":" + str(self.get_uptime()) + ":" + str(self.get_num_free_teams()) + ":" + str(self.timing) + ":" + format(self.server_id.ip_addr) + ":" + self.free_to_string() + ":" + str(self.queue)
 
 	def get_num_free_teams(self):
 		num_free_teams = 0
