@@ -127,6 +127,33 @@ class TestPlayerInfoNumFreeBasesPerTeam(unittest.TestCase):
 		server = ServerInfo(None, self.lines)
 		self.assertEqual(server.num_free_bases_per_team, self.expected)
 
+class TestPlayerInfoNumTeamsWithFreeBases_TwoOfTwoFree(unittest.TestCase):
+	def setUp(self):
+		data = "add free 2=3,4=4"
+		self.lines = data.split("\n")
+
+	def test(self):
+		server = ServerInfo(None, self.lines)
+		self.assertEqual(server.get_num_free_teams(), 2)
+
+class TestPlayerInfoNumTeamsWithFreeBases_OneOfTwoFree(unittest.TestCase):
+	def setUp(self):
+		data = "add free 2=3,4=0"
+		self.lines = data.split("\n")
+
+	def test(self):
+		server = ServerInfo(None, self.lines)
+		self.assertEqual(server.get_num_free_teams(), 1)
+
+class TestPlayerInfoNumTeamsWithFreeBases_NoneOfTwoFree(unittest.TestCase):
+	def setUp(self):
+		data = "add free 2=0,4=0"
+		self.lines = data.split("\n")
+
+	def test(self):
+		server = ServerInfo(None, self.lines)
+		self.assertEqual(server.get_num_free_teams(), 0)
+
 class TestPlayerInfoNumFreeBasesPerTeamNoTeams(unittest.TestCase):
 	def setUp(self):
 		data = "add free =24"
@@ -138,6 +165,16 @@ class TestPlayerInfoNumFreeBasesPerTeamNoTeams(unittest.TestCase):
 	def test(self):
 		server = ServerInfo(None, self.lines)
 		self.assertEqual(server.num_free_bases_per_team, self.expected)
+
+class TestPlayerInfoNumTeamsWithFreeBases_NoTeams(unittest.TestCase):
+	def setUp(self):
+		data = "add free =24"
+		self.lines = data.split("\n")
+
+	def test(self):
+		server = ServerInfo(None, self.lines)
+		self.assertEqual(server.get_num_free_teams(), 0)
+
 
 class TestTeamInfo(unittest.TestCase):
 	def setUp(self):

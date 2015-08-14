@@ -141,7 +141,15 @@ class ServerInfo:
 		return s
 
 	def to_string_client(self):
-		return self.version + ":" + self.server_name + ":" + str(self.server_id.port) + ":" + str(self.num_users) + ":" + self.map_name + ":" + self.map_size + ":" + self.map_author + ":ok:" + str(self.num_bases) + ":" + str(self.fps) + "::" + self.get_sound_str() + ":" + str(self.get_uptime()) + ":" + str(len(self.num_free_bases_per_team)) + ":" + str(self.timing) + ":" + format(self.server_id.ip_addr) + ":" + self.free_to_string() + ":" + str(self.queue)
+		return self.version + ":" + self.server_name + ":" + str(self.server_id.port) + ":" + str(self.num_users) + ":" + self.map_name + ":" + self.map_size + ":" + self.map_author + ":ok:" + str(self.num_bases) + ":" + str(self.fps) + "::" + self.get_sound_str() + ":" + str(self.get_uptime()) + ":" + str(self.get_num_free_teams()) + ":" + str(self.timing) + ":" + format(self.server_id.ip_addr) + ":" + self.free_to_string() + ":" + str(self.queue)
+
+	def get_num_free_teams(self):
+		num_free_teams = 0
+		for i in range(len(self.num_free_bases_per_team)):
+			team = self.num_free_bases_per_team[i]
+			if team.num != -1 and team.free_bases > 0:
+				num_free_teams += 1
+		return num_free_teams
 
 	def get_uptime(self):
 		if self.start_time == None:
