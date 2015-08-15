@@ -12,9 +12,9 @@ class ClientPortRequestHandler(SocketServer.StreamRequestHandler):
 			logging.info("Client " + str(client_id))
 
 			for server_info in self.server.server_database.get_servers():
-				if not server_info.rtt == None:
-					to_send = server_info.to_string_client() + "\n"
-					self.wfile.write(to_send.encode("iso-8859-1"))
+				#if not server_info.rtt == None:
+				to_send = server_info.to_string_client() + "\n"
+				self.wfile.write(to_send.encode("iso-8859-1"))
 
 			socket = self.request
 			socket.shutdown(SHUT_RDWR)
