@@ -12,6 +12,7 @@ from database import *
 from serverport import *
 from userport import *
 from faqport import *
+from pinger import *
 
 # parameters - change if necessary
 host = "0.0.0.0"
@@ -21,6 +22,7 @@ user_port = 4400
 faq_port = 4402
 server_timeout = 10*60	# in seconds
 ping_timeout = 2	# in seconds
+ping_interval = 60	# in seconds
 servers_file = "servers.txt"
 log_file = "metaserver.log"
 faq_file = "FAQ"
@@ -82,6 +84,12 @@ def start_database(server_timeout, servers_file):
 	logging.info("Started server database with server_timeout=" + str(server_timeout) + ", servers_file=" + servers_file)
 	return (database_thread, server_database)
 
+def start_pinger(ping_interval, ping_timeout, servers_database):
+	server_pinger = ServerPinger(ping_interval, ping_timeout, servers_database)
+	pinger_thread = threading.Thread(target = ServerPinger.handle, args = (server_pinger, None))
+	pinger_thread.start()
+	return (pinger_thread, server_pinger)
+
 def init_logging(log_file):
 	logging.basicConfig(filename = log_file, format = "%(asctime)s %(message)s", level = logging.INFO)
 
@@ -89,6 +97,7 @@ if __name__ == "__main__":
 	init_logging(log_file)
 	logging.info("Starting XPilot MetaServer " + meta_version)
 	(database_thread, server_database) = start_database(server_timeout, servers_file)
+	(pinger_thread, server_pinger) = start_pinger(ping_interval, ping_timeout, server_database)
 	server_port_server = start_server_port_server(server_database, ping_timeout)
 	client_port_server = start_client_port_server(server_database)
 	user_port_server = start_user_port_server()
@@ -97,5 +106,7 @@ if __name__ == "__main__":
 		server_port_server.serve_forever()
 	except KeyboardInterrupt:
 		server_database.is_exiting = True
+		server_pinger.is_exiting = True
 		server_port_server.shutdown()
 	database_thread.join()
+	pinger_thread.join()

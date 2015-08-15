@@ -120,6 +120,7 @@ class ServerInfo:
 		self.server_id = None
 		self.update_time = None
 		self.rtt = None
+		self.time_last_ping = 0
 
 	def free_to_string(self):
 		s = ""
