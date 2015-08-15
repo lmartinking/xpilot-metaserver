@@ -45,7 +45,7 @@ for each team that is not a robot team and has more than 0 bases:
 team record: ${team_number}=${num_bases - num_active_players_in_team}
 num_active_players_in_team is set if mode is team_play, for each active human player
 team records are separated by comma
-add timing 0
+add timing $racingMap ? 1 : 0
 add stime $(int32_t) (time(NULL) - serverStartTime)
 add queue $NumQueuedPlayers
 add sound $SOUND_SUPPORT_STR
