@@ -51,7 +51,7 @@ class ServerPinger:
 		sock.sendto(ping_packet, server_addr)
 		ping_packet_str = str(bytearray(ping_packet)).encode('hex')
 		logging.debug("Sent ping request " + ping_packet_str)
-		ready = select.select([sock], [], [], self.server.ping_timeout)
+		ready = select.select([sock], [], [], self.ping_timeout)
 		if ready[0]:
 			recv_data = sock.recv(256)
 			recv_data_str = str(bytearray(recv_data)).encode('hex')
