@@ -26,9 +26,9 @@ class ServerPinger:
 			if now >= server_info.time_last_ping + self.ping_interval:
 				rtt = self.get_server_rtt(server_info.server_id)
 				if rtt:
-					logging.info("Server " + str(server_id) + " : RTT is " + str(rtt) + " seconds")
+					logging.info("Server " + str(server_info.server_id) + " : RTT is " + str(rtt) + " seconds")
 				else:
-					logging.info("Server " + str(server_id) + " : ping timed out")
+					logging.info("Server " + str(server_info.server_id) + " : ping timed out")
 				server_info.rtt = rtt
 				server_info.time_last_ping = time.time()
 				pinged_count += 1
