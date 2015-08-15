@@ -1,5 +1,6 @@
 import logging
 import time
+import socket
 
 class ServerPinger:
 	def __init__(self, ping_interval, ping_timeout, servers_database):

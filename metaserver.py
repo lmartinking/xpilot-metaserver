@@ -46,12 +46,11 @@ def start_server_port_server(server_database, ping_timeout):
 	HOST, PORT = host, server_port
 	server = ServerPortServer((HOST, PORT), ServerPortRequestHandler)
 	server.server_database = server_database
-	server.ping_timeout = ping_timeout
 	ip, port = server.server_address
 	server_thread = threading.Thread(target=server.serve_forever)
 	server_thread.daemon = True
 	server_thread.start()
-	logging.info("Started server port thread at " + format(HOST) + ":" + str(PORT) + " with ping_timeout=" + str(ping_timeout))
+	logging.info("Started server port thread at " + format(HOST) + ":" + str(PORT))
 	return server
 
 def start_user_port_server():

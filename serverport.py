@@ -1,6 +1,5 @@
 import base64
 import select
-import socket
 import SocketServer
 import threading
 import time
