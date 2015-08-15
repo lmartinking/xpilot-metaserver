@@ -1,5 +1,4 @@
 import base64
-import select
 import SocketServer
 import threading
 import time
@@ -30,7 +29,7 @@ class ServerPortRequestHandler(SocketServer.BaseRequestHandler):
 				if removed:
 					self.server.server_database.write_to_file()
 			else:
-				logging.debug("Server " + str(server_id) + " : invalid command (Base64) " + base64.b64encode(data))
+				logging.info("Server " + str(server_id) + " : invalid command (Base64) " + base64.b64encode(data))
 		except Exception, e:
 			logging.exception(e)
 
