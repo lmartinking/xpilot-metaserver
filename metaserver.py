@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import logging
+from logging import Formatter
+from logging.handlers import *
 import signal
 import socket
 import SocketServer
@@ -90,7 +92,12 @@ def start_pinger(ping_interval, ping_timeout, servers_database):
 	return (pinger_thread, server_pinger)
 
 def init_logging(log_file):
-	logging.basicConfig(filename = log_file, format = "%(asctime)s %(message)s", level = logging.INFO)
+	handler = WatchedFileHandler(filename = log_file)
+	formatter = Formatter(fmt = "%(asctime)s %(message)s")
+	handler.setFormatter(formatter)
+	logger = logging.getLogger()
+	logger.addHandler(handler)
+	logger.setLevel(logging.INFO)
 
 if __name__ == "__main__":
 	init_logging(log_file)

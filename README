@@ -7,6 +7,14 @@ details.
 
 This implementation may be incomplete. Please contact the author(s) if you have questions or bug reports.
 
+Changes wrt the old meta server
+-------------------------------
+1) Old: servers are registered with the port that they specify themselved in the registration packet.
+New: for security reasons servers are registered with the actual port the registration packet is sent from.
+
+2) Old: the number of free teams sent to clients seems to include robot teams.
+New: the number of free teams sent to clients includes only the teams that human players can join.
+
 Contributors
 ------------
 Piotr Kamisiński <rotunda_pk@users.sourceforge.net>
