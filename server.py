@@ -1,4 +1,4 @@
-import common
+from common import colon2hyphen
 import jsonpickle
 import time
 from player import *
