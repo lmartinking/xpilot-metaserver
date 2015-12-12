@@ -21,3 +21,6 @@ def to_unicode_if_string(obj, encoding="utf-8"):
 		if not isinstance(obj, unicode):
 			obj = unicode(obj, encoding)
 	return obj
+
+def colon2hyphen(inputstr):
+	return inputstr.replace(":", "-")
