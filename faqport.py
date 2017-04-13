@@ -14,10 +14,15 @@ class FaqPortRequestHandler(SocketServer.StreamRequestHandler):
 			faq_file = open(self.server.faq_file, "r")
 			faq_data = faq_file.read()
 			faq_data = to_unicode_if_string(faq_data)
-			self.wfile.write(faq_data.encode("iso-8859-1"))
-			faq_file.close()
 
 			socket = self.request
+
+			try:
+				self.wfile.write(faq_data.encode("iso-8859-1"))
+			except Exception, e:
+				logging.info("Socket exception: " + str(client_id) + ", " + e)
+			faq_file.close()
+
 			socket.shutdown(SHUT_RDWR)
 			socket.close()
 		except Exception, e:

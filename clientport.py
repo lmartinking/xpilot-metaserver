@@ -11,12 +11,16 @@ class ClientPortRequestHandler(SocketServer.StreamRequestHandler):
 			client_id = IpAddrPort(self.client_address[0], self.client_address[1])
 			logging.info("Client " + str(client_id))
 
-			for server_info in self.server.server_database.get_servers():
-				#if not server_info.rtt == None:
-				to_send = server_info.to_string_client() + "\n"
-				self.wfile.write(to_send.encode("iso-8859-1"))
-
 			socket = self.request
+
+			for server_info in self.server.server_database.get_servers():
+				if not server_info.rtt == None:
+					to_send = server_info.to_string_client() + "\n"
+					try:
+						self.wfile.write(to_send.encode("iso-8859-1"))
+					except Exception, e:
+						logging.info("Socket exception: " + str(client_id) + ", " + e)
+
 			socket.shutdown(SHUT_RDWR)
 			socket.close()
 		except Exception, e:
