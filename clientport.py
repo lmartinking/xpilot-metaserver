@@ -4,6 +4,7 @@ from socket import SHUT_RDWR
 import SocketServer
 import threading
 from common import *
+import traceback
 
 class ClientPortRequestHandler(SocketServer.StreamRequestHandler):
 	def handle(self):
@@ -19,7 +20,7 @@ class ClientPortRequestHandler(SocketServer.StreamRequestHandler):
 					try:
 						self.wfile.write(to_send.encode("iso-8859-1"))
 					except Exception, e:
-						logging.info("Socket exception: " + str(client_id) + ", " + e)
+						logging.info("Socket exception: " + str(client_id) + ", " + traceback.format_exc())
 
 			socket.shutdown(SHUT_RDWR)
 			socket.close()

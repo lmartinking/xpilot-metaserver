@@ -4,6 +4,7 @@ from socket import SHUT_RDWR
 import SocketServer
 import threading
 from common import *
+import traceback
 
 class FaqPortRequestHandler(SocketServer.StreamRequestHandler):
 	def handle(self):
@@ -20,7 +21,7 @@ class FaqPortRequestHandler(SocketServer.StreamRequestHandler):
 			try:
 				self.wfile.write(faq_data.encode("iso-8859-1"))
 			except Exception, e:
-				logging.info("Socket exception: " + str(client_id) + ", " + e)
+				logging.info("Socket exception: " + str(client_id) + ", " + traceback.format_exc())
 			faq_file.close()
 
 			socket.shutdown(SHUT_RDWR)
