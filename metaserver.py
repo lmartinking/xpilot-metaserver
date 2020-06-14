@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import logging
 from logging import Formatter
 from logging.handlers import *
 import signal
 import socket
-import SocketServer
+import socketserver
 import sys
 import threading
 
@@ -34,7 +34,7 @@ meta_version = "0.1"
 
 def start_client_port_server(server_database):
 	HOST, PORT = host, client_port
-	SocketServer.TCPServer.allow_reuse_address = True
+	socketserver.TCPServer.allow_reuse_address = True
 	server = ClientPortServer((HOST, PORT), ClientPortRequestHandler)
 	server.server_database = server_database
 	ip, port = server.server_address
@@ -57,7 +57,7 @@ def start_server_port_server(server_database, ping_timeout):
 
 def start_user_port_server():
 	HOST, PORT = host, user_port
-	SocketServer.TCPServer.allow_reuse_address = True
+	socketserver.TCPServer.allow_reuse_address = True
 	server = UserPortServer((HOST, PORT), UserPortRequestHandler)
 	ip, port = server.server_address
 	server_thread = threading.Thread(target=server.serve_forever)
@@ -68,7 +68,7 @@ def start_user_port_server():
 
 def start_faq_port_server():
 	HOST, PORT = host, faq_port
-	SocketServer.TCPServer.allow_reuse_address = True
+	socketserver.TCPServer.allow_reuse_address = True
 	server = FaqPortServer((HOST, PORT), FaqPortRequestHandler)
 	server.faq_file = faq_file
 	ip, port = server.server_address

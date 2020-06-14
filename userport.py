@@ -1,11 +1,11 @@
 import logging
 import socket
 from socket import SHUT_RDWR
-import SocketServer
+import socketserver
 import threading
 from common import *
 
-class UserPortRequestHandler(SocketServer.StreamRequestHandler):
+class UserPortRequestHandler(socketserver.StreamRequestHandler):
 	def handle(self):
 		client_id = IpAddrPort(self.client_address[0], self.client_address[1])
 		logging.info("User " + str(client_id))
@@ -16,5 +16,5 @@ class UserPortRequestHandler(SocketServer.StreamRequestHandler):
 		socket = self.request
 		socket.shutdown(SHUT_RDWR)
 
-class UserPortServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
+class UserPortServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 	pass

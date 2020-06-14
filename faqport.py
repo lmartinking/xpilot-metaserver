@@ -1,12 +1,12 @@
 import logging
 import socket
 from socket import SHUT_RDWR
-import SocketServer
+import socketserver
 import threading
 from common import *
 import traceback
 
-class FaqPortRequestHandler(SocketServer.StreamRequestHandler):
+class FaqPortRequestHandler(socketserver.StreamRequestHandler):
 	def handle(self):
 		try:
 			client_id = IpAddrPort(self.client_address[0], self.client_address[1])
@@ -20,14 +20,14 @@ class FaqPortRequestHandler(SocketServer.StreamRequestHandler):
 
 			try:
 				self.wfile.write(faq_data.encode("iso-8859-1"))
-			except Exception, e:
+			except Exception as e:
 				logging.info("Socket exception: " + str(client_id) + ", " + traceback.format_exc())
 			faq_file.close()
 
 			socket.shutdown(SHUT_RDWR)
 			socket.close()
-		except Exception, e:
+		except Exception as e:
 			logging.exception(e)
 
-class FaqPortServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
+class FaqPortServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 	pass

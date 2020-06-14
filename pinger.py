@@ -1,3 +1,4 @@
+import binascii
 import logging
 import select
 import socket
@@ -49,12 +50,12 @@ class ServerPinger:
 		ping_packet = self.create_ping_packet(source_port)
 		server_addr = (server_id.ip_addr, server_id.port)
 		sock.sendto(ping_packet, server_addr)
-		ping_packet_str = str(bytearray(ping_packet)).encode('hex')
+		ping_packet_str = binascii.hexlify(ping_packet).decode("utf-8")
 		logging.debug("Sent ping request " + ping_packet_str)
 		ready = select.select([sock], [], [], self.ping_timeout)
 		if ready[0]:
 			recv_data = sock.recv(256)
-			recv_data_str = str(bytearray(recv_data)).encode('hex')
+			recv_data_str = binascii.hexlify(bytearray(recv_data)).decode("utf-8")
 			logging.debug("Received ping response " + recv_data_str)
 			return True
 		return False
@@ -70,7 +71,7 @@ class ServerPinger:
 		magic_word = int("0xf4ed", 16)
 		magic_word_bytes = reversed(int_to_bytes(magic_word, 4))
 		ping_packet.extend(magic_word_bytes)
-		ping_packet.insert(len(ping_packet), "p")
+		ping_packet.insert(len(ping_packet), ord('p'))
 		ping_packet.insert(len(ping_packet), 0)
 		source_port_bytes = reversed(int_to_bytes(source_port, 2))
 		ping_packet.extend(source_port_bytes)
