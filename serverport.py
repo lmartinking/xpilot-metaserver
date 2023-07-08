@@ -12,8 +12,13 @@ class ServerPortRequestHandler(socketserver.BaseRequestHandler):
                 try:
                         server_id = IpAddrPort(self.client_address[0], self.client_address[1])
 
-                        data = self.request[0].decode('utf-8').rstrip('\0')
-                        #data = str(bytes)
+                        # Many clients still communicate in Latin1 (assumed), but we are optimistic,
+                        # so we try UTF-8 first.
+                        try:
+                                data = self.request[0].decode('utf-8').rstrip('\0')
+                        except:
+                                data = self.request[0].decode('latin1', errors='ignore').rstrip('\0')
+
                         logging.debug("Received " + data)
                         lines = data.split("\n")
                         command_type = CommandType(lines)
