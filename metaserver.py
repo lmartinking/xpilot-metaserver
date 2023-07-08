@@ -26,7 +26,7 @@ server_timeout = 10*60	# in seconds
 ping_timeout = 2	# in seconds
 ping_interval = 10*60	# in seconds
 servers_file = "servers.txt"
-log_file = "metaserver.log"
+log_file = None # "metaserver.log"
 faq_file = "FAQ"
 
 # parameters - do not change
@@ -92,15 +92,21 @@ def start_pinger(ping_interval, ping_timeout, servers_database):
 	return (pinger_thread, server_pinger)
 
 def init_logging(log_file):
-	handler = WatchedFileHandler(filename = log_file)
-	formatter = Formatter(fmt = "%(asctime)s %(message)s")
-	handler.setFormatter(formatter)
-	logger = logging.getLogger()
-	logger.addHandler(handler)
-	logger.setLevel(logging.INFO)
+	level = logging.INFO
+	message_format = "%(asctime)s %(message)s"
+	if log_file:
+		handler = WatchedFileHandler(filename=log_file)
+		formatter = Formatter(fmt=message_format)
+		handler.setFormatter(formatter)
+		logger = logging.getLogger()
+		logger.addHandler(handler)
+		logger.setLevel(level)
+	else:
+		logging.basicConfig(level=level, format=message_format)
 
 if __name__ == "__main__":
 	init_logging(log_file)
+
 	logging.info("Starting XPilot MetaServer " + meta_version)
 	(database_thread, server_database) = start_database(server_timeout, servers_file)
 	(pinger_thread, server_pinger) = start_pinger(ping_interval, ping_timeout, server_database)
